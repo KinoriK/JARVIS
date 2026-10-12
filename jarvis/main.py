@@ -54,7 +54,8 @@ def main() -> None:
     if not db.get_setting("owner_chat_id"):
         logging.warning("No owner yet: the FIRST chat to message the bot becomes its owner.")
     db.log("startup", "Jarvis started")
-    telegram_bot.create_app(post_init).run_polling()
+    # bootstrap_retries=-1: if Telegram is unreachable at startup, keep retrying instead of crashing.
+    telegram_bot.create_app(post_init).run_polling(bootstrap_retries=-1)
 
 
 if __name__ == "__main__":
