@@ -108,7 +108,9 @@ async def on_text(update, context):
 
 def create_app(post_init=None) -> Application:
     global _app
-    builder = Application.builder().token(os.environ["TELEGRAM_BOT_TOKEN"])
+    # Generous timeouts: the defaults (5s) give up too fast on slow or filtered connections.
+    builder = (Application.builder().token(os.environ["TELEGRAM_BOT_TOKEN"])
+               .connect_timeout(20).read_timeout(30))
     if post_init:
         builder = builder.post_init(post_init)
     _app = builder.build()
