@@ -1,0 +1,8 @@
+.env
+token.json
+credentials.json
+jarvis.db
+jarvis.log
+.venv/
+__pycache__/
+.pytest_cache/

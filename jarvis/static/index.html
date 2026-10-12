@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvis Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Oxanium:wght@500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%232fd8ff' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%232fd8ff'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="app">
+
+  <aside class="side" aria-label="Navigation">
+    <div class="brand">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="21" fill="none" stroke="#2fd8ff" stroke-opacity=".35" stroke-width="1.5"/>
+        <circle cx="24" cy="24" r="16" fill="none" stroke="#2fd8ff" stroke-width="2" stroke-dasharray="4 3"/>
+        <circle cx="24" cy="24" r="10" fill="none" stroke="#67c9f0" stroke-width="1.5"/>
+        <circle cx="24" cy="24" r="5" fill="#bff3ff"/>
+      </svg>
+      <div><div class="brand-name">JARVIS</div><div class="brand-sub">COMMAND CENTER</div></div>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#top" class="active" data-icon="grid">Command Center</a>
+      <a href="#chat" data-icon="chat">Chat</a>
+      <a href="#tasks" data-icon="check">Tasks <span class="badge" id="nav-tasks">–</span></a>
+      <a href="#calendar" data-icon="calendar">Calendar</a>
+      <a href="#inbox" data-icon="mail">Inbox <span class="badge" id="nav-inbox">–</span></a>
+      <a href="#briefing" data-icon="doc">Briefing</a>
+      <a href="#activity" data-icon="pulse">Activity</a>
+    </nav>
+    <section class="voice" aria-label="Voice status">
+      <h3>Voice Status</h3>
+      <div class="wave" id="side-wave" aria-hidden="true"></div>
+      <div class="voice-mic" aria-hidden="true" data-icon="mic"></div>
+      <small>Voice coming soon</small>
+    </section>
+  </aside>
+
+  <header class="top" id="top">
+    <div class="top-left">
+      <div class="pill" id="sys-pill" role="status">SYSTEM STATUS <span class="warn"><span class="dot"></span> CONNECTING</span></div>
+    </div>
+    <div class="clock" aria-live="off">
+      <div class="date" id="date">&nbsp;</div>
+      <div class="time" id="time">--:--:--</div>
+    </div>
+    <div class="top-right">
+      <div class="chip"><span data-icon="clock"></span><div><div class="k">Last briefing</div><div class="v" id="last-run">–</div></div></div>
+      <div class="chip"><span data-icon="play"></span><div><div class="k">Next briefing</div><div class="v" id="next-run">–</div></div></div>
+      <div class="operator"><div><b>Owner</b><small id="owner-sub">Telegram</small></div><div class="avatar" data-icon="user"></div></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- row 1 -->
+    <section class="panel p-status row1" aria-labelledby="h-status">
+      <div class="panel-head"><h2 id="h-status">System Overview</h2></div>
+      <div class="scroll" id="status-body"></div>
+    </section>
+
+    <section class="panel p-chat row1" id="chat" aria-labelledby="h-chat">
+      <div class="panel-head"><h2 id="h-chat">Chat with Jarvis</h2>
+        <div class="actions"><button class="link" id="chat-clear" type="button">Clear view</button></div></div>
+      <div class="orb" id="orb" aria-hidden="true"></div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <form class="chat-form" id="chat-form" autocomplete="off">
+        <button class="round" type="button" disabled aria-disabled="true" data-tip="Voice coming soon" aria-label="Microphone (voice coming soon)" data-icon="mic"></button>
+        <label class="sr-only" for="chat-input">Message Jarvis</label>
+        <input id="chat-input" name="message" placeholder="Ask Jarvis anything…" maxlength="4000">
+        <button class="round send" type="submit" aria-label="Send" data-icon="send"></button>
+      </form>
+    </section>
+
+    <section class="panel p-activity row1" id="activity" aria-labelledby="h-activity">
+      <div class="panel-head"><h2 id="h-activity">Activity Log</h2>
+        <div class="actions"><span class="live"><span class="dot"></span>LIVE</span></div></div>
+      <div class="scroll" id="activity-body"></div>
+    </section>
+
+    <!-- row 2 -->
+    <section class="panel p-tasks row2" id="tasks" aria-labelledby="h-tasks">
+      <div class="panel-head"><h2 id="h-tasks">Tasks</h2>
+        <div class="actions"><button class="link" id="tasks-toggle" type="button">Show done</button></div></div>
+      <form class="task-form" id="task-form" autocomplete="off">
+        <label class="sr-only" for="task-title">New task</label>
+        <input id="task-title" name="title" placeholder="New task…" maxlength="300" required>
+        <label class="sr-only" for="task-due">Due date</label>
+        <input id="task-due" name="due_date" type="date">
+        <button class="btn" type="submit"><span data-icon="plus"></span>Add</button>
+      </form>
+      <div class="scroll" id="tasks-body"></div>
+    </section>
+
+    <section class="panel p-calendar row2" id="calendar" aria-labelledby="h-cal">
+      <div class="panel-head"><h2 id="h-cal">Today's Calendar</h2>
+        <div class="actions"><button class="link" data-refresh="calendar" type="button">Refresh</button></div></div>
+      <div class="scroll" id="calendar-body"></div>
+    </section>
+
+    <section class="panel p-quick row2 quick" aria-labelledby="h-quick">
+      <div class="panel-head"><h2 id="h-quick">Quick Commands</h2></div>
+      <div class="scroll">
+        <button class="tile c-cyan" type="button" data-cmd="focus-task"><span class="ico" data-icon="plus"></span><span class="t">New task</span></button>
+        <button class="tile c-cyan" type="button" data-cmd="briefing"><span class="ico" data-icon="doc"></span><span class="t">Run morning briefing</span></button>
+        <button class="tile c-cyan" type="button" data-ask="What's on my calendar for the next 3 days?"><span class="ico" data-icon="calendar"></span><span class="t">Next 3 days</span></button>
+        <button class="tile c-cyan" type="button" data-ask="Which emails from today actually need a reply from me?"><span class="ico" data-icon="mail"></span><span class="t">Triage my inbox</span></button>
+      </div>
+    </section>
+
+    <!-- row 3 -->
+    <section class="panel p-briefing row3" id="briefing" aria-labelledby="h-brief">
+      <div class="panel-head"><h2 id="h-brief">Morning Briefing</h2>
+        <div class="actions"><span class="briefing-meta" id="briefing-meta"></span>
+          <button class="link" data-cmd="briefing" type="button">Run now</button></div></div>
+      <div class="scroll" id="briefing-body"></div>
+    </section>
+
+    <section class="panel p-inbox row3" id="inbox" aria-labelledby="h-inbox">
+      <div class="panel-head"><h2 id="h-inbox">Inbox · Needs Reply</h2>
+        <div class="actions"><span class="tag c-green" id="inbox-count"></span>
+          <button class="link" data-refresh="inbox" type="button">Refresh</button></div></div>
+      <div class="scroll" id="inbox-body"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-left">
+      <div class="chip"><span data-icon="globe"></span><div><div class="k">Timezone</div><div class="v" id="f-tz">–</div></div></div>
+      <div class="chip"><span data-icon="chip"></span><div><div class="k">Model</div><div class="v" id="f-model">–</div></div></div>
+      <div class="chip"><span data-icon="link"></span><div><div class="k">Google</div><div class="v" id="f-google">–</div></div></div>
+      <div class="dots" aria-hidden="true"></div>
+    </div>
+    <button class="talk" type="button" id="talk" aria-label="Talk to Jarvis (focus chat)">
+      <svg class="wave-ico" viewBox="0 0 64 26" aria-hidden="true"><g id="wave-l"></g></svg>
+      <span class="label"><b>TALK TO JARVIS</b><small id="talk-sub">At your service</small></span>
+      <svg class="wave-ico" viewBox="0 0 64 26" aria-hidden="true" style="transform:scaleX(-1)"><use href="#wave-l"/></svg>
+    </button>
+    <div class="foot-right">
+      <div class="dots" aria-hidden="true"></div>
+      <button class="btn exec" type="button" data-cmd="briefing"><span data-icon="play"></span>Morning Briefing</button>
+    </div>
+  </footer>
+</div>
+
+<div class="gate" id="gate" hidden>
+  <form class="panel" id="gate-form">
+    <h2>Dashboard token</h2>
+    <p>Paste the DASHBOARD_TOKEN from your .env. It's stored in this browser only.</p>
+    <label class="sr-only" for="gate-input">Token</label>
+    <input id="gate-input" type="password" autocomplete="off" required>
+    <button class="btn" type="submit">Unlock</button>
+  </form>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
